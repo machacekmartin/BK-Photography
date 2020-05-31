@@ -14,8 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('home', ['categories' => $categories]);
+        return view('admin.categories.index', ['categories' => Category::all()]);
     }
 
     /**
@@ -36,7 +35,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $valid = $request->validate([
+            'name' => 'required'
+        ]);
+
+        Category::create($valid);
     }
 
     /**
@@ -81,6 +84,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        Category::destroy($category->id);
+        return redirect('/admin/categories');
     }
 }

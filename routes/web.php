@@ -13,9 +13,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'CategoryController@index');
-Route::get('/home', 'CategoryController@index');
-Route::get('/index', 'CategoryController@index');
+//////////////////// PUBLIC ////////////////////
+// Index
+Route::get('/', 'PageController@index');
+Route::get('/home', 'PageController@index');
+Route::get('/index', 'PageController@index');
+// Contact 
+Route::get('/contact', 'PageController@contact');
+// Gallery
+Route::get('/gallery', 'PageController@gallery');
 
-// Authentication
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+
+//////////////////// PRIVATE ////////////////////
+Auth::routes();
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/admin', 'PageController@admin')->name('admin');
+    // Categories
+    Route::get('/admin/categories', 'CategoryController@index')->name('admin.categories');
+
+    Route::get('/admin/categories/{category}/destroy', 'CategoryController@destroy');
+
+    // Albums
+    Route::get('/admin/albums', 'AlbumController@index')->name('admin.albums');
+    // Images
+    Route::get('/admin/images', 'ImageController@index')->name('admin.images');
+});
+
