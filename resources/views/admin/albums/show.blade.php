@@ -6,7 +6,7 @@ Admin Show album
 <hr>
 
 <span>ID: {{ $album->id }}</span>
-<form action="{{ route('admin.albums.update', $album->id) }}" method="POST">
+<form action="{{ route('admin.albums.update', $album->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <label for="name">Name: </label>

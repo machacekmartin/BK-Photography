@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Album;
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AlbumController extends Controller
 {
@@ -84,10 +85,15 @@ class AlbumController extends Controller
     {
         $valid = $request->validate([
             'name' => 'required',
-            'thumbnail' => 'nullable',
+            'thumbnail' => 'nullable|image',
             'category_id' => 'required'
             
         ]);
+        if ($image = $request->file('thumbnail')){
+            Storage::delete(Storage::files('public/album-'.$album->id.'/thumbnail'));
+            $valid['thumbnail'] = $image->getClientOriginalName();
+            Storage::disk('public')->putFileAs('album-'.$album->id.'/thumbnail', $image, $valid['thumbnail']);
+        }
         $album->update($valid);
         return redirect('/admin/albums/'.$album->id.'/show');
     }
