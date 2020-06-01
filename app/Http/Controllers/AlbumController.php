@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Album;
+use App\Category;
 use Illuminate\Http\Request;
 
 class AlbumController extends Controller
@@ -14,7 +15,12 @@ class AlbumController extends Controller
      */
     public function index()
     {
-        return view('admin.albums.index', ['albums' => Album::all()]);
+        $categories = Category::select('name', 'id')->get();
+        return view('admin.albums.index', 
+        [
+            'albums' => Album::all(), 
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -35,7 +41,12 @@ class AlbumController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $valid = $request->validate([
+            'name' => 'required',
+            'category_id' => 'required'
+        ]);
+        Album::create($valid);
+        return redirect(route('admin.albums'));
     }
 
     /**
@@ -57,7 +68,7 @@ class AlbumController extends Controller
      */
     public function edit(Album $album)
     {
-        //
+
     }
 
     /**
@@ -69,7 +80,12 @@ class AlbumController extends Controller
      */
     public function update(Request $request, Album $album)
     {
-        //
+        $valid = $request->validate([
+            'name' => 'required',
+            'category_id' => 'required'
+        ]);
+        $album->update($valid);
+        return redirect('/admin/albums');
     }
 
     /**

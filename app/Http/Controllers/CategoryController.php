@@ -38,8 +38,8 @@ class CategoryController extends Controller
         $valid = $request->validate([
             'name' => 'required'
         ]);
-
         Category::create($valid);
+        return redirect(route('admin.categories'));
     }
 
     /**
@@ -73,7 +73,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $valid = $request->validate([
+            'name' => 'required'
+        ]);
+        $category->update($valid);
+        return redirect('/admin/categories');
     }
 
     /**
