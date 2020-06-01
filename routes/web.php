@@ -38,9 +38,13 @@ Route::group(['middleware' => ['auth']], function() {
     // Albums
     Route::get('/admin/albums', 'AlbumController@index')->name('admin.albums');
     Route::post('/admin/albums', 'AlbumController@store')->name('admin.albums.store');
+    Route::get('/admin/albums/{album}/show', 'AlbumController@show')->name('admin.albums.show');
     Route::put('/admin/albums/{album}', 'AlbumController@update')->name('admin.albums.update');
     Route::get('/admin/albums/{album}/destroy', 'AlbumController@destroy')->name('admin.albums.destroy');
+
     // Images
     Route::get('/admin/images', 'ImageController@index')->name('admin.images');
+    Route::post('/admin/images', 'ImageController@store')->name('admin.images.store');
+    
 });
 

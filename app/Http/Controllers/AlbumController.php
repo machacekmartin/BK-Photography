@@ -43,6 +43,7 @@ class AlbumController extends Controller
     {
         $valid = $request->validate([
             'name' => 'required',
+            'thumbnail' => 'nullable',
             'category_id' => 'required'
         ]);
         Album::create($valid);
@@ -57,7 +58,8 @@ class AlbumController extends Controller
      */
     public function show(Album $album)
     {
-        //
+        $categories = Category::select('name', 'id')->get();
+        return view('admin.albums.show', ['album' => $album, 'categories' => $categories]);
     }
 
     /**
@@ -82,10 +84,12 @@ class AlbumController extends Controller
     {
         $valid = $request->validate([
             'name' => 'required',
+            'thumbnail' => 'nullable',
             'category_id' => 'required'
+            
         ]);
         $album->update($valid);
-        return redirect('/admin/albums');
+        return redirect('/admin/albums/'.$album->id.'/show');
     }
 
     /**
@@ -96,6 +100,7 @@ class AlbumController extends Controller
      */
     public function destroy(Album $album)
     {
-        //
+        Album::destroy($album->id);
+        return redirect('/admin/albums');
     }
 }

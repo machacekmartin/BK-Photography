@@ -16,6 +16,7 @@ Admin Categories
     <p>Created: {{ $category->created_at }}</p>
     <p>Updated: {{ $category->updated_at }}</p>
     <a href="{{ route('admin.categories.destroy', $category->id) }}">Delete</a>
+    
     <hr>
 @endforeach
 

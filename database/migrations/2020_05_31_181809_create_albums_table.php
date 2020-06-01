@@ -16,6 +16,7 @@ class CreateAlbumsTable extends Migration
         Schema::create('albums', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('thumbnail')->nullable();
             $table->foreignId('category_id')
                 ->constrained('categories')
                 ->onDelete('cascade');
