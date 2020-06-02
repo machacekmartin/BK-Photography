@@ -90,9 +90,9 @@ class AlbumController extends Controller
             
         ]);
         if ($image = $request->file('thumbnail')){
-            Storage::delete(Storage::files('public/album-'.$album->id.'/thumbnail'));
+            Storage::delete(Storage::files('public/albums/album-'.$album->id.'/thumbnail'));
             $valid['thumbnail'] = $image->getClientOriginalName();
-            Storage::disk('public')->putFileAs('album-'.$album->id.'/thumbnail', $image, $valid['thumbnail']);
+            Storage::disk('public')->putFileAs('albums/album-'.$album->id.'/thumbnail', $image, $valid['thumbnail']);
         }
         $album->update($valid);
         return redirect('/admin/albums/'.$album->id.'/show');
@@ -107,6 +107,7 @@ class AlbumController extends Controller
     public function destroy(Album $album)
     {
         Album::destroy($album->id);
+        Storage::deleteDirectory('/public/albums/album-'.$album->id);
         return redirect('/admin/albums');
     }
 }

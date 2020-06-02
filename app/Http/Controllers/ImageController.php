@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -35,7 +36,20 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
+        $valid = $request->validate([
+            'image' => 'required',
+            'album_id' => 'required',
+            'image.*' => 'image'
+        ]);
+        $images = $request->file('image');
 
+        foreach ($images as $image) {
+            $name = date('YmdHis').''.$image->getClientOriginalName();
+            Storage::disk('public')->putFileAs('albums/album-'.$valid['album_id'].'/', $image, $name);
+            $valid['image'] = $name;
+            Image::create($valid);
+        }
+        return redirect(route('admin.albums'));
     }
 
     /**
@@ -80,6 +94,8 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        //
+        Image::destroy($image->id);
+        Storage::delete('/public/albums/album-'.$image->album_id.'/'.$image->image);
+        return redirect('/admin/albums/'.$image->album_id.'/show');
     }
 }

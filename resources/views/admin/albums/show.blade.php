@@ -20,9 +20,9 @@ Admin Show album
     </select>
     <br>
     <label for="thumbnail">Thumbnail: </label>
-    <p>{{ $album->thumbnail }}</p>
+    <img src="{{ asset('storage/albums/album-'. $album->id.'/thumbnail/'.$album->thumbnail) }}" alt="Thumbnail">
     <input type="file" name="thumbnail">
-
+    <br>
     <input type="submit" value="Update album">
 </form>
 
@@ -30,14 +30,18 @@ Admin Show album
 
 <p>Images: </p>
 <pre>
-    @foreach ($album->images as $image)
-        <p> {{ $image->image }}</p>
-    @endforeach
+    <div style="display: flex; flex-flow: row;">
+        @foreach ($album->images as $image)
+            <a href="{{ route('admin.images.destroy', $image->id) }}">Delete</a>
+            <img src="{{ asset('storage/albums/album-'.$image->album_id.'/'.$image->image) }}" alt="">
+        @endforeach
+    </div>
 </pre>
 <p>Upload images to this album</p>
 <form action="{{ route('admin.images.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
-    <input type="file" name="images[]">
+    <input type="file" name="image[]" multiple>
+    <input type="hidden" value="{{ $album->id }}" name="album_id">
     <input type="submit" value="save">
 </form>
 

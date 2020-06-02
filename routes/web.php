@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth']], function() {
     // Images
     Route::get('/admin/images', 'ImageController@index')->name('admin.images');
     Route::post('/admin/images', 'ImageController@store')->name('admin.images.store');
+    Route::get('/admin/images/{image}/destroy', 'ImageController@destroy')->name('admin.images.destroy');
     
 });
 
